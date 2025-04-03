@@ -1,0 +1,141 @@
+import java.util.ArrayList;
+import java.util.InputMismatchException;
+import java.util.Scanner;
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        ArrayList<String> historialResultados = new ArrayList<>();
+        int opcion;
+
+        do {
+            System.out.println("\n--- Calculadora de Área y Perímetro ---");
+            System.out.println("1. Círculo");
+            System.out.println("2. Cuadrado");
+            System.out.println("3. Triángulo");
+            System.out.println("4. Rectángulo");
+            System.out.println("5. Pentágono");
+            System.out.println("6. Ver historial de cálculos");
+            System.out.println("7. Salir");
+            System.out.print("Seleccione una opción: ");
+
+            while (true) {
+                try {
+                    opcion = scanner.nextInt();
+                    scanner.nextLine();
+                    if (opcion >= 1 && opcion <= 7) break;
+                    System.out.println("Por favor, ingrese una opción válida (1-7).");
+                } catch (InputMismatchException e) {
+                    System.out.println("Entrada inválida. Ingrese un número.");
+                    scanner.nextLine();
+                }
+            }
+
+            if (opcion == 7) {
+                System.out.println("Saliendo del programa...");
+                break;
+            }
+
+            if (opcion == 6) {
+                System.out.println("\n--- Historial de Cálculos ---");
+                if (historialResultados.isEmpty()) {
+                    System.out.println("No hay cálculos almacenados.");
+                } else {
+                    for (int i = 0; i < historialResultados.size(); i++) {
+                        System.out.printf("%d. %s\n", i + 1, historialResultados.get(i));
+                    }
+                }
+                continue;
+            }
+
+            // VALIDAR QUE SOLO SE PUEDA ELEGIR 1 O 2
+            int operacion;
+            while (true) {
+                System.out.println("¿Qué desea calcular?");
+                System.out.println("1. Área");
+                System.out.println("2. Perímetro");
+                System.out.print("Seleccione una opción: ");
+                try {
+                    operacion = scanner.nextInt();
+                    scanner.nextLine();
+                    if (operacion == 1 || operacion == 2) break;
+                    System.out.println("Error: Debe ingresar 1 o 2.");
+                } catch (InputMismatchException e) {
+                    System.out.println("Error: Ingrese un número válido (1 o 2).");
+                    scanner.nextLine();
+                }
+            }
+
+            double resultado = 0;
+            String descripcion = "";
+
+            try {
+                switch (opcion) {
+                    case 1:
+                        System.out.print("Ingrese el radio del círculo: ");
+                        double r = scanner.nextDouble();
+                        resultado = (operacion == 1) ? Math.PI * r * r : 2 * Math.PI * r;
+                        descripcion = (operacion == 1) ? "Área del Círculo" : "Perímetro del Círculo";
+                        break;
+                    case 2:
+                        System.out.print("Ingrese el lado del cuadrado: ");
+                        double l = scanner.nextDouble();
+                        resultado = (operacion == 1) ? l * l : 4 * l;
+                        descripcion = (operacion == 1) ? "Área del Cuadrado" : "Perímetro del Cuadrado";
+                        break;
+                    case 3:
+                        if (operacion == 1) {
+                            System.out.print("Ingrese la base del triángulo: ");
+                            double base = scanner.nextDouble();
+                            System.out.print("Ingrese la altura del triángulo: ");
+                            double altura = scanner.nextDouble();
+                            resultado = (base * altura) / 2;
+                            descripcion = "Área del Triángulo";
+                        } else {
+                            System.out.print("Ingrese el primer lado del triángulo: ");
+                            double lado1 = scanner.nextDouble();
+                            System.out.print("Ingrese el segundo lado del triángulo: ");
+                            double lado2 = scanner.nextDouble();
+                            System.out.print("Ingrese el tercer lado del triángulo: ");
+                            double lado3 = scanner.nextDouble();
+                            resultado = lado1 + lado2 + lado3;
+                            descripcion = "Perímetro del Triángulo";
+                        }
+                        break;
+                    case 4:
+                        System.out.print("Ingrese la base del rectángulo: ");
+                        double baseR = scanner.nextDouble();
+                        System.out.print("Ingrese la altura del rectángulo: ");
+                        double alturaR = scanner.nextDouble();
+                        resultado = (operacion == 1) ? baseR * alturaR : 2 * (baseR + alturaR);
+                        descripcion = (operacion == 1) ? "Área del Rectángulo" : "Perímetro del Rectángulo";
+                        break;
+                    case 5:
+                        System.out.print("Ingrese el lado del pentágono: ");
+                        double ladoP = scanner.nextDouble();
+                        if (operacion == 1) {
+                            System.out.print("Ingrese el apotema del pentágono: ");
+                            double apotema = scanner.nextDouble();
+                            resultado = (5 * ladoP * apotema) / 2;
+                            descripcion = "Área del Pentágono";
+                        } else {
+                            resultado = 5 * ladoP;
+                            descripcion = "Perímetro del Pentágono";
+                        }
+                        break;
+                    default:
+                        System.out.println("Opción no válida. Intente nuevamente.");
+                        continue;
+                }
+                System.out.printf("%s: %.2f\n", descripcion, resultado);
+                historialResultados.add(descripcion + ": " + String.format("%.2f", resultado));
+            } catch (InputMismatchException e) {
+                System.out.println("Error: Ingrese valores numéricos válidos.");
+                scanner.nextLine();
+            }
+
+        } while (opcion != 7);
+
+        scanner.close();
+    }
+}
